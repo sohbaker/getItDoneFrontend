@@ -1,0 +1,16 @@
+{
+  "name": "toDoList",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel public/index.html",
+    "build": "parcel build public/index.html",
+    "cypress:open": "cypress open",
+    "cy:run": "cypress run"
+  },
+  "devDependencies": {
+    "cypress": "^3.7.0"
+  },
+  "dependencies": {}
+}
