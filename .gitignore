@@ -1,7 +1,10 @@
 .cache
 .DS_Store
 .idea/
+cypress/fixtures
+cypress/plugins
 cypress/screenshots/*
+cypress/support
 cypress/videos/*
 dist
 elm-stuff
