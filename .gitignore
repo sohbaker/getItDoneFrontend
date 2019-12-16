@@ -1,0 +1,10 @@
+.cache
+.DS_Store
+.idea/
+cypress/screenshots/*
+cypress/videos/*
+dist
+elm-stuff
+node_modules/
+npm-debug.log*
+repl-temp-*

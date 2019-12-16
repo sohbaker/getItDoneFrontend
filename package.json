@@ -1,0 +1,19 @@
+{
+  "name": "toDoList",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel public/index.html -p 4523",
+    "build": "parcel build public/index.html",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "clean": "rm -rf dist/*"
+  },
+  "devDependencies": {
+    "cypress": "^3.7.0",
+    "elm-hot": "^1.1.4",
+    "node-elm-compiler": "^5.0.4"
+  },
+  "dependencies": {}
+}
