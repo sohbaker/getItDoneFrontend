@@ -1,6 +1,6 @@
-#To Do List 
+# To Do List 
 
-##Objectives
+## Objectives
 A CRUD application which enables the following actions:
 - Create TODOs 
 - Read/retrieve a list of all the stored TODOs
@@ -10,12 +10,12 @@ A CRUD application which enables the following actions:
 - Record the time they were create and completed
 - Bonus: Save TODOs to `localStorage` 
 
-##Steps
+## Steps
 - [ ] As a User/Cypress I can interact with a front-end application
 - [ ] As a User/Cypress I can interact with an Application running via SpringBoot API 
 - [ ] As a User/Cypress I can interact with an Application running via SpringBoot API, accessing 'To Do's' stored in an H2 database 
 
-##Tools
+## Tools
 - [x] use [Cypress](https://www.cypress.io/) E2E testing framework
 - [x] use [Parcel](https://parceljs.org/) web application bundler
 - [ ] use [Kotlin](https://kotlinlang.org/)
