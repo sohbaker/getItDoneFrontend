@@ -11,6 +11,9 @@ describe("To Do List Application", () => {
             .type("drink water")
             .should("have.value", "drink water");
 
-        cy.get("form").submit();
+        cy.get('button').click();
+
+        cy.get(".all-entries")
+            .should("contain", "drink water");
     });
 });
