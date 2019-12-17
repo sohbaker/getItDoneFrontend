@@ -11,9 +11,9 @@ A CRUD application which enables the following actions:
 - Bonus: Save TODOs to `localStorage` 
 
 ## Steps
-- [ ] As a User/Cypress I can interact with a front-end TDL application
-- [ ] As a User/Cypress I can interact with a TDL Application running via SpringBoot API 
-- [ ] As a User/Cypress I can interact with a TDL Application running via SpringBoot API, accessing 'To Do's' stored in an H2 database 
+- [ ] As a User/Cypress I can interact with a front-end application
+- [ ] As a User/Cypress I can interact with an Application running via SpringBoot API 
+- [ ] As a User/Cypress I can interact with an Application running via SpringBoot API, accessing 'To Do's' stored in an H2 database 
 
 ## Tools
 - [x] use [Cypress](https://www.cypress.io/) E2E testing framework
