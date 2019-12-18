@@ -1,19 +1,51 @@
-describe("To Do List Application", () => {
-    it("displays the home page", () => {
-      cy.visit("/").contains("Welcome to To Do List");
-    });
+describe('To Do List Application', () => {
+    context('When the home page is first opened', () => {
+        it('displays the welcome message', () => {
+            cy.visit('/').contains('To Do List');
+        });
+    })
 
-    it ("allows a user to create a new TODO", () => {
-        cy.visit("/");
+    context('Adding TODOs', () => {
+        it ('allows a user to add a new TODO', () => {
+            cy.visit('/')
+            cy
+                .get('.new-todo-item')
+                .type('drink water')
+                .should('have.value', 'drink water')
 
-        cy
-            .get('input[name="todo"]')
-            .type("drink water")
-            .should("have.value", "drink water");
+            cy.get('button').click()
 
-        cy.get('button').click();
+            cy
+                .get('.all-entries')
+                .should('contain', 'drink water')
+        });
 
-        cy.get(".all-entries")
-            .should("contain", "drink water");
-    });
+       it ("allows a user to add multiple TODOs", () => {
+            cy.visit('/')
+
+            cy
+                .get('.new-todo-item')
+                .type('drink water')
+                .should('have.value', 'drink water')
+
+            cy.get('button').click()
+
+            cy.get('.todo-list li')
+                .eq(0)
+                .find('label')
+                .should('contain', 'drink water')
+
+            cy
+                .get('.new-todo-item')
+                .type('go for a walk')
+                .should('have.value', 'go for a walk')
+
+            cy.get('button').click()
+
+            cy.get('.todo-list li')
+                .eq(1)
+                .find('label')
+                .should('contain', 'go for a walk')
+       });
+    })
 });

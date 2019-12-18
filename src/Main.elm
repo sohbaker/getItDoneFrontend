@@ -58,7 +58,8 @@ update msg model =
                         model.entries
                     else
                         model.entries ++ [ newEntry model.field model.uuid ]
-              }
+                , field = ""
+             }
 
         UpdateField str ->
              { model | field = str }
@@ -77,13 +78,14 @@ view model =
 viewInput : String -> Html Msg
 viewInput task =
     header [ class "header" ]
-        [ h1 [] [ text "Welcome to To Do List" ]
+        [ h1 [] [ text "To Do List" ]
         , input
-            [ class "new-todo"
+            [ class "new-todo-item"
             , placeholder "What needs to be done?"
+            , size 50
             , autofocus True
             , value task
-            , name "todo"
+            , name "newTodoItem"
             , onInput UpdateField
             ]
             []
