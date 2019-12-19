@@ -14,14 +14,16 @@ type alias Model =
     { entries : List Entry
     , field: String
     , visibility: String
-    , uuid : Int
+    , uid : Int
     }
+
 
 type alias Entry =
     { name: String
     , completed: Bool
     , id : Int
     }
+
 
 newEntry : String -> Int -> Entry
 newEntry desc id =
@@ -30,19 +32,22 @@ newEntry desc id =
     , id = id
     }
 
+
 init : Model
 init =
         { entries = []
         , field = ""
         , visibility = "All"
-        , uuid = 0
+        , uid = 0
         }
+
 
 -- UPDATE
 type Msg
     = NoOp
-    | Add
+    | CreateTodo
     | UpdateField String
+
 
 update : Msg -> Model ->  Model
 update msg model =
@@ -50,18 +55,20 @@ update msg model =
         NoOp ->
              model
 
-        Add ->
+        CreateTodo ->
              { model
-                | uuid = model.uuid + 1
+                | uid = model.uid + 1
                 , entries =
                     if String.isEmpty model.field then
                         model.entries
                     else
-                        model.entries ++ [ newEntry model.field model.uuid ]
-              }
+                        model.entries ++ [ newEntry model.field model.uid ]
+                , field = ""
+             }
 
         UpdateField str ->
              { model | field = str }
+
 
 -- VIEW
 view : Model -> Html Msg
@@ -74,46 +81,53 @@ view model =
             ]
         ]
 
+
 viewInput : String -> Html Msg
 viewInput task =
     header [ class "header" ]
-        [ h1 [] [ text "Welcome to To Do List" ]
+        [ h1 [] [ text "To Do List" ]
         , input
-            [ class "new-todo"
+            [ class "new-todo-item"
             , placeholder "What needs to be done?"
+            , size 50
             , autofocus True
             , value task
-            , name "todo"
+            , name "newTodoItem"
             , onInput UpdateField
             ]
             []
-        , button [ onClick Add ] [ text "Submit" ]
+        , button [ onClick CreateTodo ] [ text "Submit" ]
         ]
+
 
 viewEntries : List Entry -> Html Msg
 viewEntries entries =
     div
-        [ class "all-entries" ]
+        [ class "view-entries" ]
         [ Keyed.ul [ class "todo-list" ] <|
             List.map viewKeyedEntry entries
         ]
 
+
 viewKeyedEntry : Entry -> ( String, Html Msg )
 viewKeyedEntry todo =
     ( String.fromInt todo.id, lazy viewEntry todo )
+
 
 viewEntry : Entry -> Html Msg
 viewEntry todo =
     li
         []
         [ div
-            [ class "view" ]
+            [ class "view-item" ]
             [ label
                 []
                 [ text todo.name ]
             ]
         ]
 
+
+-- MAIN
 main : Program () Model Msg
 main =
     Browser.sandbox
