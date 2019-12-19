@@ -3,24 +3,17 @@ describe('To Do List Application', () => {
         it('displays the welcome message', () => {
             cy.visit('/').contains('To Do List');
         });
-    })
 
-    context('Adding TODOs', () => {
-        it ('allows a user to add a new TODO', () => {
+        it('focuses on the input field for a new todo', () => {
             cy.visit('/')
             cy
-                .get('.new-todo-item')
-                .type('drink water')
-                .should('have.value', 'drink water')
-
-            cy.get('button').click()
-
-            cy
-                .get('.all-entries')
-                .should('contain', 'drink water')
+                .get('.new-todo-item').focus()
+                .should('have.class', 'new-todo-item')
         });
+    })
 
-       it ("allows a user to add multiple TODOs", () => {
+    context('Creating TODOs', () => {
+       it ("allows a user to create multiple TODOs", () => {
             cy.visit('/')
 
             cy
