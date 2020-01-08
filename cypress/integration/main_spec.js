@@ -12,21 +12,27 @@ describe('To Do List Application', () => {
         });
     })
 
+    context('Fetching TODOs', () => {
+        it ("displays current todo items", () => {
+            cy.visit('/')
+
+            cy.get('.todo-list').find('tr').should('have.length', 4)
+        });
+    })
+
     context('Creating TODOs', () => {
        it ("allows a user to create multiple TODOs", () => {
             cy.visit('/')
 
             cy
                 .get('.new-todo-item')
-                .type('drink water')
-                .should('have.value', 'drink water')
+                .type('sip cocktail')
+                .should('have.value', 'sip cocktail')
 
             cy.get('button').click()
 
-            cy.get('.todo-list li')
-                .eq(0)
-                .find('label')
-                .should('contain', 'drink water')
+            cy.get('.todo-list td')
+                .should('contain', 'sip cocktail')
 
             cy
                 .get('.new-todo-item')
@@ -35,9 +41,7 @@ describe('To Do List Application', () => {
 
             cy.get('button').click()
 
-            cy.get('.todo-list li')
-                .eq(1)
-                .find('label')
+            cy.get('.todo-list td')
                 .should('contain', 'go for a walk')
        });
     })
