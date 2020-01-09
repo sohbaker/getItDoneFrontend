@@ -9,6 +9,7 @@ import Html.Events exposing (..)
 import Html.Lazy exposing (lazy)
 import Http
 import Json.Decode as Decode exposing (Decoder, bool, field, int, map3, string)
+import Json.Encode as Encode
 
 
 -- MODEL
@@ -25,6 +26,7 @@ type alias Model =
     , visibility: String
     , uid : Int
     , errorMessage : Maybe String
+    , createError : Maybe String
     }
 
 
@@ -35,6 +37,7 @@ initialModel =
     , visibility = "All"
     , uid = 0
     , errorMessage = Nothing
+    , createError = Nothing
     }
 
 
@@ -47,6 +50,7 @@ init _ =
 type Msg
     = NoOp
     | CreateTodo
+    | TodoCreated (Result Http.Error Entry)
     | UpdateField String
     | SendHttpRequest
     | DataReceived (Result Http.Error (List Entry))
@@ -73,14 +77,6 @@ entryDecoder =
         (field "id" int)
 
 
-newEntry : String -> Bool -> Int -> Entry
-newEntry desc completed id =
-    { name = desc
-    , completed = completed
-    , id = id
-    }
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -88,15 +84,7 @@ update msg model =
              ( model, Cmd.none )
 
         CreateTodo ->
-             ( { model
-                | uid = model.uid + 1
-                , entries =
-                    if String.isEmpty model.field then
-                        model.entries
-                    else
-                        model.entries ++ [ newEntry model.field False model.uid ]
-                , field = ""
-             }, Cmd.none )
+            ( model, createTodo model )
 
         UpdateField str ->
              ( { model | field = str }, Cmd.none )
@@ -118,6 +106,36 @@ update msg model =
               }
             , Cmd.none
             )
+
+        TodoCreated (Ok _) ->
+            ( { model
+                | uid = model.uid + 1
+                , field = ""
+                , createError = Nothing
+            } , fetchTodos
+            )
+
+        TodoCreated (Err error) ->
+            ( { model | createError = Just (buildErrorMessage error) }
+            , Cmd.none
+            )
+
+
+createTodo : Model -> Cmd Msg
+createTodo model =
+    Http.post
+        { url = url ++ "/todos"
+        , body = Http.jsonBody (newPostEncoder model)
+        , expect = Http.expectJson TodoCreated entryDecoder
+        }
+
+
+newPostEncoder : Model -> Encode.Value
+newPostEncoder model =
+    Encode.object
+        [ ("name", Encode.string model.field)
+        , ("completed", Encode.bool False)
+        ]
 
 
 buildErrorMessage : Http.Error -> String
@@ -145,14 +163,14 @@ view model =
     div [ class "wrapper"
         ]
         [ div [ class "todo-app"]
-            [ lazy viewInput model.field
+            [ lazy viewInput model
             , lazy viewEntriesOrError model
             ]
         ]
 
 
-viewInput : String -> Html Msg
-viewInput task =
+viewInput : Model -> Html Msg
+viewInput model =
     header [ class "header" ]
         [ h1 [] [ text "To Do List" ]
         , input
@@ -160,12 +178,13 @@ viewInput task =
             , placeholder "What needs to be done?"
             , size 50
             , autofocus True
-            , value task
+            , value model.field
             , name "newTodoItem"
             , onInput UpdateField
             ]
             []
         , button [ onClick CreateTodo ] [ text "Submit" ]
+        , viewCreateError model.createError
         ]
 
 
@@ -173,14 +192,14 @@ viewEntriesOrError : Model -> Html Msg
 viewEntriesOrError model =
     case model.errorMessage of
         Just message ->
-            viewError message
+            viewFetchError message
 
         Nothing ->
             viewEntries model.entries
 
 
-viewError : String -> Html Msg
-viewError errorMessage =
+viewFetchError : String -> Html Msg
+viewFetchError errorMessage =
     let errorHeading =
             "Couldn't fetch todos."
     in
@@ -188,6 +207,19 @@ viewError errorMessage =
             [ h3 [] [ text errorHeading ]
             , text ("Error: " ++ errorMessage )
             ]
+
+
+viewCreateError : Maybe String -> Html Msg
+viewCreateError maybeError =
+    case maybeError of
+        Just error ->
+            div []
+               [ h5 [] [ text "Couldn't create a todo."]
+               , text (" Error: " ++ error)
+               ]
+
+        Nothing ->
+            text ""
 
 
 
