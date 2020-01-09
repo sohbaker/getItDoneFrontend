@@ -1,7 +1,6 @@
 describe('To Do List Application', () => {
-    // beforeEach( () => {
-    //     cy.resetBackend();
-    //     // cy.visit("/teardown");
+    // beforeEach(() => {
+    // // cy.resetBackend();
     // });
 
     context('When the home page is first opened', () => {
