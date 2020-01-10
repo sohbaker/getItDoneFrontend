@@ -1,7 +1,7 @@
 describe('To Do List Application', () => {
-    // beforeEach(() => {
-    // // cy.resetBackend();
-    // });
+    beforeEach(() => {
+        cy.request({url: "http://localhost:8080/reset", method: "POST"});
+    });
 
     context('When the home page is first opened', () => {
         it('displays the welcome message', () => {
@@ -20,7 +20,7 @@ describe('To Do List Application', () => {
         it ("displays current todo items", () => {
             cy.visit('/');
 
-            cy.get('.todo-list').find('tr').should('have.length', 4)
+            cy.get('.todo-list').find('tr').should('have.length', 1)
         });
     });
 
