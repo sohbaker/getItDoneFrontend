@@ -25,6 +25,20 @@ describe('To Do List Application', () => {
     });
 
     context('Creating TODOs', () => {
+        it ("allows a user to create a single TODO", () => {
+            cy.visit('/');
+
+            cy
+                .get('.new-todo-item')
+                .type('sip cocktail')
+                .should('have.value', 'sip cocktail');
+
+            cy.get('button').click();
+
+            cy.get('.todo-list td')
+                .should('contain', 'sip cocktail');
+        });
+
         it ("allows a user to create multiple TODOs", () => {
             cy.visit('/');
 
